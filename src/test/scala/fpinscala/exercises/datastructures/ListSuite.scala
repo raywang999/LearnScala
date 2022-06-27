@@ -70,6 +70,10 @@ class ListSuite extends PropSuite:
     assertEquals(List.reverse(list), scalaListToList(listToScalaList(list).reverse))
   }
 
+  test("List.foldRightViaFoldLeft")(genIntList) { list =>
+    assertEquals(List.foldRightViaFoldLeft(list, "", _.toString() + _), listToScalaList(list).foldRight("")(_.toString() + _))
+  }
+
   test("List.appendViaFoldRight")(genIntList ** genIntList) { case list1 ** list2 =>
     assertEquals(
       List.appendViaFoldRight(list1, list2),
@@ -119,17 +123,22 @@ class ListSuite extends PropSuite:
     )
   }
 
+  test("List.filterViaFlatMap")(genIntList) { list =>
+    assertEquals(
+      List.filterViaFlatMap(list)(_ % 2 == 0),
+      scalaListToList(listToScalaList(list).filter(_ % 2 == 0))
+    )
+  }
+
   test("List.addPairwise")(genIntList ** genIntList) { case list1 ** list2 =>
     val expectedSList = listToScalaList(list1).zip(listToScalaList(list2)).map { case (a, b) => a + b }
     assertEquals(List.addPairwise(list1, list2), scalaListToList(expectedSList))
   }
 
-  /*
   test("List.zipWith")(genIntList ** genIntList) { case list1 ** list2 =>
     val expectedSList = listToScalaList(list1).zip(listToScalaList(list2)).map(_ * _)
     assertEquals(List.zipWith(list1, list2, _ * _), scalaListToList(expectedSList))
   }
-   */
 
   test("List.hasSubsequence")(genIntList ** genSmallNum) { case list ** n =>
     assert(List.hasSubsequence(list, Nil))
@@ -144,7 +153,7 @@ class ListSuite extends PropSuite:
       List.hasSubsequence(list1, list2),
       listToScalaList(list1).containsSlice(listToScalaList(list2))
     )
-  }
+  } 
 
   private def listToScalaList[A](list: List[A]): SList[A] = list match
     case Nil         => SList.empty[A]

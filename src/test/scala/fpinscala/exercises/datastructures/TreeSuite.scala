@@ -59,7 +59,7 @@ class TreeSuite extends PropSuite:
   test("Tree.maximumViaFold")(genIntTree) { tree =>
     assertEquals(tree.maximumViaFold, toScalaList(tree).max.getOrElse(0))
   }
-
+  
   private def toScalaList[A](t: Tree[A]): SList[Option[A]] = t match
     case Leaf(v)      => SList(Some(v))
     case Branch(l, r) => (Option.empty[A] +: toScalaList(l)) ++ toScalaList(r)
