@@ -83,8 +83,10 @@ object List: // `List` companion object. Contains functions for creating and wor
       else l
     }
     // bro ok offical solution be like:. How tf were we suposed to know that?  
+    /*
     case Cons(h,t) if (f(h)) => dropWhile(t,f)
     case _ => l
+    */
   }
 
   // Exercise 3.6. I swear to god, I didn't even check teh answer and Its basically correct byte for byte
