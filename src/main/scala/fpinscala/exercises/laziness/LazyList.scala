@@ -110,6 +110,7 @@ enum LazyList[+A]:
     }}.forAll{
       case (None,_) => false
       case (Some(a),Some(b)) => a == b
+      case _ => false
     }
   
   def tails: LazyList[LazyList[A]] = 

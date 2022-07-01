@@ -72,11 +72,9 @@ class RNGSuite extends PropSuite:
     assert(checkRND(rng, counter, map(int)(_.toString), _.toIntOption.isDefined))
   }
 
-  /*
-  test("RNG._double")(genRNG ** genCounter) { case rng ** counter =>
-    assert(checkRND(rng, counter, _double, isInInterval))
+  test("RNG.doubleViaMap")(genRNG ** genCounter) { case rng ** counter =>
+    assert(checkRND(rng, counter, doubleViaMap, isInInterval))
   }
-   */
 
   test("RNG.map2")(genRNG ** genCounter) { case rng ** counter =>
     val randC = map2(double, double)((d1, d2) => (d1, d2))
@@ -87,6 +85,11 @@ class RNGSuite extends PropSuite:
     val ints: Rand[List[Int]] = sequence(List.fill(lengthOfList)(int))
     if lengthOfList <= 0 then assert(ints(rng)._1.isEmpty)
     else assert(checkRND(rng, counter, ints, list => list == list.distinct))
+  }
+
+  test("RNG.intsViaSequence")(genRNG ** genCounter ** genLengthOfList) { case rng ** counter ** lengthOfList =>
+    if lengthOfList <= 0 then assert(intsViaSequence(lengthOfList)(rng)._1.isEmpty)
+    else assert(checkRND(rng, counter, intsViaSequence(lengthOfList), list => list == list.distinct))
   }
 
   test("RNG.flatMap")(genRNG ** genCounter ** genSmallPosNum) { case rng ** counter ** limit =>
